@@ -8,7 +8,7 @@ import { Button } from "@/components/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { translations } from "@/config/i18n";
 
-export function HomePage() {
+export default function HomePage() {
   const t = translations.es; // En producción, usar contexto de i18n
 
   const services = [

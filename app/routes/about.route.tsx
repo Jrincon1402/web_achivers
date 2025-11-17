@@ -1,5 +1,5 @@
 /**
  * Ruta sobre nosotros
  */
-export { AboutPage as default } from "@/pages/AboutPage";
+export { default } from "@/pages/about";
 

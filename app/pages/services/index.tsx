@@ -16,7 +16,7 @@ import { servicesService } from "@/services/services.service";
 import type { Service } from "@/types";
 import { translations } from "@/config/i18n";
 
-export function ServicesPage() {
+export default function ServicesPage() {
   const t = translations.es; // En producción, usar contexto de i18n
   const [services, setServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);

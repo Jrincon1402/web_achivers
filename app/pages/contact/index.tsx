@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { env } from "@/config/env";
 import { translations } from "@/config/i18n";
 
-export function ContactPage() {
+export default function ContactPage() {
   const t = translations.es; // En producción, usar contexto de i18n
 
   return (

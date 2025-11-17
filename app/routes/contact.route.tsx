@@ -1,5 +1,5 @@
 /**
  * Ruta de contacto
  */
-export { ContactPage as default } from "@/pages/ContactPage";
+export { default } from "@/pages/contact";
 

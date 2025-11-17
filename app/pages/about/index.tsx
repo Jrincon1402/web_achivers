@@ -13,7 +13,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { translations } from "@/config/i18n";
 
-export function AboutPage() {
+export default function AboutPage() {
   const t = translations.es; // En producción, usar contexto de i18n
 
   const faqs = [

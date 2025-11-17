@@ -21,10 +21,18 @@ app/
 │   └── index.ts        # Barrel export
 │
 ├── pages/               # Componentes de páginas específicas
-│   ├── HomePage.tsx    # Página de inicio
-│   ├── AboutPage.tsx   # Página sobre nosotros
-│   ├── ServicesPage.tsx # Página de servicios
-│   └── ContactPage.tsx # Página de contacto
+│   ├── home/           # Página de inicio
+│   │   ├── index.tsx   # Componente principal de la página
+│   │   └── components/ # Componentes específicos de esta página
+│   ├── about/          # Página sobre nosotros
+│   │   ├── index.tsx   # Componente principal de la página
+│   │   └── components/ # Componentes específicos de esta página
+│   ├── services/       # Página de servicios
+│   │   ├── index.tsx   # Componente principal de la página
+│   │   └── components/ # Componentes específicos de esta página
+│   └── contact/       # Página de contacto
+│       ├── index.tsx   # Componente principal de la página
+│       └── components/ # Componentes específicos de esta página
 │
 ├── routes/              # Rutas de la aplicación
 │   ├── home.route.tsx  # Ruta de inicio
@@ -106,9 +114,11 @@ app/
 
 ### Agregar una nueva página
 
-1. Crear el componente de página en `pages/` (ej: `ContactPage.tsx`)
-2. Crear la ruta en `routes/` (ej: `contact.route.tsx`) que exporte el componente de página
-3. Crear la ruta de Next.js en `app/[nombre]/page.tsx` que importe desde `@/routes/[nombre].route`
+1. Crear la carpeta de la página en `pages/[nombre]/`
+2. Crear `pages/[nombre]/index.tsx` con el componente principal de la página
+3. Crear `pages/[nombre]/components/` para componentes específicos de esa página
+4. Crear la ruta en `routes/` (ej: `[nombre].route.tsx`) que exporte desde `@/pages/[nombre]`
+5. Crear la ruta de Next.js en `app/[nombre]/page.tsx` que importe desde `@/routes/[nombre].route`
 
 ## Ejemplo de Flujo Completo
 
@@ -139,19 +149,21 @@ export function ContactForm() {
 }
 
 // 6. Crear componente de página
-// components/ContactPage.tsx
-export function ContactPage() {
+// pages/contact/index.tsx
+export default function ContactPage() {
   return <ContactForm />;
 }
 
-// 7. Exportar desde components/index.ts
-export { ContactPage } from "./ContactPage";
+// 7. Crear componentes específicos (opcional)
+// pages/contact/components/ContactInfo.tsx
+export function ContactInfo() { ... }
 
 // 8. Crear ruta
+// routes/contact.route.tsx
+export { default } from "@/pages/contact";
+
+// 9. Crear ruta de Next.js
 // app/contact/page.tsx
-import { ContactPage } from "@/components/ContactPage";
-export default function Contact() {
-  return <ContactPage />;
-}
+export { default } from "@/routes/contact.route";
 ```
 
