@@ -18,7 +18,7 @@ export const translations = {
     },
     home: {
       title: "Bienvenido a nuestro negocio",
-      subtitle: "Ofrecemos soluciones de calidad para tu empresa",
+      subtitle: "Transformamos tus ideas en resultados exitosos",
       cta: "Conoce más",
     },
     about: {
