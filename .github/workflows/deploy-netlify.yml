@@ -46,8 +46,25 @@ jobs:
           # Si NETLIFY_SITE_ID no está configurado, crear el sitio automáticamente
           if [ -z "$NETLIFY_SITE_ID" ]; then
             echo "⚠️  NETLIFY_SITE_ID no configurado. Creando sitio automáticamente..."
-            SITE_INFO=$(netlify sites:create --name "${{ github.event.repository.name }}" --json)
-            NETLIFY_SITE_ID=$(echo $SITE_INFO | grep -o '"site_id":"[^"]*"' | cut -d'"' -f4)
+            SITE_OUTPUT=$(netlify sites:create --name "${{ github.event.repository.name }}" 2>&1)
+            echo "Output del comando:"
+            echo "$SITE_OUTPUT"
+            # Extraer el Site ID del output (buscando "Site ID:" o URL)
+            NETLIFY_SITE_ID=$(echo "$SITE_OUTPUT" | grep -i "Site ID:" | sed -n 's/.*Site ID:[[:space:]]*\([a-f0-9-]*\).*/\1/p' | head -1)
+            # Si no se encontró con ese formato, buscar en la URL
+            if [ -z "$NETLIFY_SITE_ID" ]; then
+              NETLIFY_SITE_ID=$(echo "$SITE_OUTPUT" | grep -o 'https://app\.netlify\.com/sites/[^/[:space:]]*' | sed 's|https://app\.netlify\.com/sites/||' | head -1)
+            fi
+            # Si aún no se encontró, intentar extraer del formato JSON que puede mostrar netlify
+            if [ -z "$NETLIFY_SITE_ID" ]; then
+              NETLIFY_SITE_ID=$(echo "$SITE_OUTPUT" | grep -o '"site_id":"[^"]*"' | cut -d'"' -f4 | head -1)
+            fi
+            if [ -z "$NETLIFY_SITE_ID" ]; then
+              echo "❌ Error: No se pudo obtener el Site ID del output."
+              echo "Por favor, crea el sitio manualmente en Netlify y configura NETLIFY_SITE_ID como secret."
+              echo "Alternativamente, revisa el output arriba para encontrar el Site ID manualmente."
+              exit 1
+            fi
             echo "✅ Sitio creado con ID: $NETLIFY_SITE_ID"
             echo "⚠️  IMPORTANTE: Agrega este Site ID como secret NETLIFY_SITE_ID en GitHub para futuros deploys"
             echo "📋 Ve a: Settings > Secrets and variables > Actions y agrega NETLIFY_SITE_ID = $NETLIFY_SITE_ID"
