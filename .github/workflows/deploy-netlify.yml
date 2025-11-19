@@ -1,0 +1,59 @@
+name: Deploy to Netlify
+
+on:
+  workflow_run:
+    workflows: ["CI - Validaciones y Tests"]
+    types:
+      - completed
+    branches: [main, master, develop]
+  push:
+    branches: [main, master, develop]
+    # El workflow_run solo despliega si el CI pasó exitosamente
+    # El push despliega directamente (puedes cambiarlo según tus preferencias)
+
+jobs:
+  deploy:
+    name: Desplegar a Netlify
+    runs-on: ubuntu-latest
+    # Solo despliega si el CI pasó exitosamente cuando se ejecuta desde workflow_run
+    # O si es un push directo a la rama principal
+    if: ${{ github.event.workflow_run.conclusion == 'success' || (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')) }}
+    
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Build del proyecto
+        run: npm run build
+
+      - name: Instalar Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Desplegar a Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          # Si NETLIFY_SITE_ID no está configurado, crear el sitio automáticamente
+          if [ -z "$NETLIFY_SITE_ID" ]; then
+            echo "⚠️  NETLIFY_SITE_ID no configurado. Creando sitio automáticamente..."
+            SITE_INFO=$(netlify sites:create --name "${{ github.event.repository.name }}" --json)
+            NETLIFY_SITE_ID=$(echo $SITE_INFO | grep -o '"site_id":"[^"]*"' | cut -d'"' -f4)
+            echo "✅ Sitio creado con ID: $NETLIFY_SITE_ID"
+            echo "⚠️  IMPORTANTE: Agrega este Site ID como secret NETLIFY_SITE_ID en GitHub para futuros deploys"
+            echo "📋 Ve a: Settings > Secrets and variables > Actions y agrega NETLIFY_SITE_ID = $NETLIFY_SITE_ID"
+          fi
+          
+          # Desplegar a producción
+          netlify deploy --prod --site-id="$NETLIFY_SITE_ID" --message="Deploy desde GitHub Actions: ${{ github.sha }}"
+          echo "✅ Despliegue completado exitosamente"
+

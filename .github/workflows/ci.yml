@@ -1,0 +1,43 @@
+name: CI - Validaciones y Tests
+
+on:
+  pull_request:
+    branches: [main, master, develop]
+  push:
+    branches: [main, master, develop]
+
+jobs:
+  test:
+    name: Ejecutar Validaciones
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar ESLint
+        run: npm run lint -- .
+
+      - name: Verificar tipos de TypeScript
+        run: npm run type-check
+
+      - name: Build del proyecto
+        run: npm run build
+
+      - name: Verificar que el build se completó exitosamente
+        run: |
+          if [ ! -d ".next" ]; then
+            echo "❌ Error: El build no generó la carpeta .next"
+            exit 1
+          fi
+          echo "✅ Build completado exitosamente"
+
