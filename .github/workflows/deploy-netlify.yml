@@ -43,7 +43,7 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         run: |
-          # Si NETLIFY_SITE_ID no está configurado, crear el sitio automáticamente
+          # Verificar que NETLIFY_SITE_ID esté configurado
           if [ -z "$NETLIFY_SITE_ID" ]; then
             echo "⚠️  NETLIFY_SITE_ID no configurado. Creando sitio automáticamente..."
             SITE_OUTPUT=$(netlify sites:create --name "${{ github.event.repository.name }}" 2>&1)
@@ -68,9 +68,12 @@ jobs:
             echo "✅ Sitio creado con ID: $NETLIFY_SITE_ID"
             echo "⚠️  IMPORTANTE: Agrega este Site ID como secret NETLIFY_SITE_ID en GitHub para futuros deploys"
             echo "📋 Ve a: Settings > Secrets and variables > Actions y agrega NETLIFY_SITE_ID = $NETLIFY_SITE_ID"
+            # Exportar NETLIFY_SITE_ID para que el comando deploy lo use
+            export NETLIFY_SITE_ID
           fi
           
           # Desplegar a producción
-          netlify deploy --prod --site-id="$NETLIFY_SITE_ID" --message="Deploy desde GitHub Actions: ${{ github.sha }}"
+          # Netlify CLI usa NETLIFY_SITE_ID automáticamente desde las variables de entorno
+          netlify deploy --prod --message="Deploy desde GitHub Actions: ${{ github.sha }}"
           echo "✅ Despliegue completado exitosamente"
 
