@@ -1,1 +1,6 @@
-npm test
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Pre-commit no ejecuta tests, solo validaciones rápidas si las necesitas
+# Los tests se ejecutan en pre-push
+

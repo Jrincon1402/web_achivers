@@ -1,27 +1,23 @@
 name: Deploy to Netlify
 
 on:
-  workflow_run:
-    workflows: ["CI - Validaciones y Tests"]
+  pull_request:
     types:
-      - completed
-    branches: [main, master, develop]
-  push:
-    branches: [main, master, develop]
-    # El workflow_run solo despliega si el CI pasó exitosamente
-    # El push despliega directamente (puedes cambiarlo según tus preferencias)
+      - closed
+    branches: [main, master]
 
 jobs:
   deploy:
     name: Desplegar a Netlify
     runs-on: ubuntu-latest
-    # Solo despliega si el CI pasó exitosamente cuando se ejecuta desde workflow_run
-    # O si es un push directo a la rama principal
-    if: ${{ github.event.workflow_run.conclusion == 'success' || (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')) }}
+    # Solo despliega cuando un PR se hace merge a main/master
+    if: github.event.pull_request.merged == true && (github.event.pull_request.base.ref == 'main' || github.event.pull_request.base.ref == 'master')
     
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
