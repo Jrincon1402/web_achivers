@@ -1,5 +1,3 @@
-# web_achivers
-
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 > Nota: Este repositorio forma parte de un curso de GitHub (prácticas y ejemplos para aprender flujo de trabajo con ramas, PRs y CI/CD).
@@ -22,8 +20,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for V[...]
-
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for V[...]  
 
 ## Flujo recomendado de Git (resumen para desarrolladores)
 
@@ -68,8 +65,82 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
    git stash pop
    ```
 
-Comandos útiles (rápida referencia)
-- git status, git add, git commit, git push, git pull, git fetch, git checkout -b, git switch, git merge, git rebase, git log --oneline --graph, git diff, git stash, git reset --hard (usar con precaución), git tag, git cherry-pick, git revert.
+## Comandos git más utilizados (referencia rápida)
+
+A continuación encontrarás una lista con los comandos Git que se usan con más frecuencia en el flujo de desarrollo, con ejemplos y notas.
+
+- git status
+  - Qué hace: muestra el estado actual del working tree (archivos modificados, staged, sin trackear).
+  - Ejemplo: git status
+
+- git add <archivo>
+  - Qué hace: prepara (stage) uno o varios archivos para el próximo commit.
+  - Ejemplo: git add src/components/MyComponent.tsx
+
+- git commit -m "mensaje"
+  - Qué hace: crea un commit con los cambios staged.
+  - Ejemplo: git commit -m "fix: corregir validación del formulario"
+
+- git commit -am "mensaje"
+  - Qué hace: añade y commitea cambios en archivos ya trackeados (no añade archivos nuevos no trackeados).
+  - Ejemplo: git commit -am "chore: actualizar dependencias"
+
+- git push
+  - Qué hace: sube tus commits a la rama remota.
+  - Ejemplo: git push origin feature/mi-nueva-funcionalidad
+
+- git pull
+  - Qué hace: trae cambios del remoto y los fusiona en la rama actual.
+  - Ejemplo: git pull origin main
+
+- git fetch
+  - Qué hace: trae referencias y commits del remoto sin mezclarlos en la rama actual.
+  - Ejemplo: git fetch origin
+
+- git checkout -b <rama>
+  - Qué hace: crear y cambiar a una nueva rama.
+  - Ejemplo: git checkout -b feature/nueva
+
+- git switch <rama>
+  - Qué hace: cambiar de rama (alternativa moderna a checkout).
+  - Ejemplo: git switch main
+
+- git merge <rama>
+  - Qué hace: fusiona otra rama en la actual.
+  - Ejemplo: git merge feature/ajustes-ui
+
+- git rebase <rama>
+  - Qué hace: reaplica commits sobre otra base (mantiene un historial más lineal).
+  - Nota: usar con cuidado y preferir rebase en ramas de trabajo locales.
+  - Ejemplo: git rebase origin/main
+
+- git log --oneline --graph --all
+  - Qué hace: ver el historial de commits en forma compacta y gráfica.
+
+- git diff
+  - Qué hace: muestra diferencias entre working tree y staged o entre commits.
+
+- git stash
+  - Qué hace: guarda cambios temporales sueltos y limpia el working tree.
+  - Ejemplo: git stash push -m "wip: idea prueba"
+
+- git stash pop
+  - Qué hace: aplica y elimina el último stash.
+
+- git reset --soft <commit>
+  - Qué hace: mueve HEAD a <commit>, preservando los cambios en staged.
+
+- git reset --hard <commit>
+  - Qué hace: mueve HEAD a <commit> y descarta cambios locales (¡peligroso!).
+
+- git tag -a v1.0 -m "release 1.0"
+  - Qué hace: crear una etiqueta anotada para versiones.
+
+- git cherry-pick <commit>
+  - Qué hace: aplica un commit puntual a la rama actual.
+
+- git revert <commit>
+  - Qué hace: crea un commit que revierte los cambios de otro commit (seguro para usar en main).
 
 ## GitHub Actions (CI / CD)
 
@@ -87,7 +158,4 @@ En este repositorio hay una carpeta .github/workflows con dos flujos principales
 
 ---
 
-Si quieres, yo puedo:
-- (A) Generar el contenido del README en la rama propuesta para que solo revises y hagas el PR.
-- (B) Revisar el contenido exacto de .github/workflows/ci.yml y deploy-netlify.yml y darte un resumen detallado con triggers, versiones de Node y secretos usados.
-Dime cuál prefieres y preparo los pasos o el commit listo para aplicar.
+Si quieres que también adapte el README en español completo o que cree el Pull Request automáticamente, lo hago ahora.
