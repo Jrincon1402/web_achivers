@@ -5,18 +5,42 @@
 
 import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { servicesService } from "@/services/services.service";
 import type { Service } from "@/types";
+import { 
+  FaBriefcase, 
+  FaGlobe, 
+  FaMobileAlt, 
+  FaTools,
+  FaReact,
+  FaNodeJs,
+  FaPython,
+  FaJava
+} from "react-icons/fa";
+import type { IconType } from "react-icons";
 
 interface ServiceCardProps {
   service: Service;
 }
 
-export function ServiceCard({ service }: ServiceCardProps) {
-  const IconComponent = service.icon 
-    ? servicesService.getIconComponent(service.icon)
-    : null;
+// Mapeo estático de iconos (declarado fuera del render)
+const iconMap: Record<string, IconType> = {
+  briefcase: FaBriefcase,
+  globe: FaGlobe,
+  mobile: FaMobileAlt,
+  tools: FaTools,
+  react: FaReact,
+  nodejs: FaNodeJs,
+  python: FaPython,
+  java: FaJava,
+};
 
+// Componente helper para renderizar iconos (declarado fuera del render)
+function ServiceIcon({ iconName, className }: { iconName: string; className?: string }) {
+  const IconComponent = iconMap[iconName] || FaBriefcase;
+  return <IconComponent className={className} />;
+}
+
+export function ServiceCard({ service }: ServiceCardProps) {
   return (
     <Card className="group relative h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
       {/* Efecto de brillo en hover */}
@@ -33,7 +57,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
       />
       
       <CardHeader>
-        {IconComponent && (
+        {service.icon && (
           <motion.div 
             className="mb-2"
             whileHover={{ 
@@ -50,7 +74,10 @@ export function ServiceCard({ service }: ServiceCardProps) {
               whileHover={{ scale: 1.15 }}
               transition={{ type: "spring", stiffness: 400 }}
             >
-              <IconComponent className="h-10 w-10 text-primary transition-colors duration-300 group-hover:text-primary/80" />
+              <ServiceIcon 
+                iconName={service.icon} 
+                className="h-10 w-10 text-primary transition-colors duration-300 group-hover:text-primary/80" 
+              />
             </motion.div>
           </motion.div>
         )}
