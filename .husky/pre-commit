@@ -1,1 +1,4 @@
-npm test
+
+# Pre-commit no ejecuta tests, solo validaciones rápidas si las necesitas
+# Los tests se ejecutan en pre-push
+

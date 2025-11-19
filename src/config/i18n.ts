@@ -17,7 +17,7 @@ export const translations = {
       contact: "Contacto",
     },
     home: {
-      title: "Bienvenido a nuestro negocio",
+      title: "Bienvenido a nuestro negocio nuevo",
       subtitle: "Transformamos tus ideas en resultados exitosos",
       cta: "Conoce más",
     },
